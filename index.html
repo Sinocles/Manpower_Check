@@ -214,13 +214,21 @@ async function reverseGeocode(lat,lng) {
   } catch(e) { cityName='Error red'; barrioName='Error red'; }
 }
 
+// Reemplaza tu función startGPS actual por esta para máxima precisión:
 function startGPS() {
   navigator.geolocation.watchPosition(pos => {
     gpsData = pos.coords;
     document.getElementById('gpsDot').className='gps-dot ok';
     document.getElementById('gpsStatus').textContent=`GPS: ±${Math.round(pos.coords.accuracy)}m`;
     reverseGeocode(pos.coords.latitude, pos.coords.longitude);
-  }, null, {enableHighAccuracy:true});
+  }, err => {
+     console.error("Error GPS:", err);
+     document.getElementById('gpsStatus').textContent="GPS: ERROR DE SEÑAL";
+  }, {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0 // <--- Esto obliga al móvil a buscar una posición nueva y no una vieja
+  });
 }
 
 document.getElementById('btnAllow').onclick = () => {
