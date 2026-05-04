@@ -261,25 +261,44 @@ function render(img) {
   const ts = formatTs(new Date());
   const coords = gpsData ? `${gpsData.latitude.toFixed(5)}, ${gpsData.longitude.toFixed(5)}` : 'GPS NO DISPONIBLE';
 
-  // Dibujar recuadro de datos en la imagen
-  const h = 220, w = 550, x = 20, y = canvas.height - h - 20;
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  // --- CONFIGURACIÓN DEL RECUADRO DE DATOS ---
+  const h = 260, w = 600, x = 20, y = canvas.height - h - 20;
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
   ctx.fillRect(x, y, w, h);
-  ctx.fillStyle = '#1264a3';
-  ctx.fillRect(x, y, w, 5); // Línea decorativa azul
-
-  ctx.fillStyle = '#2c3e50';
-  ctx.font = 'bold 28px Rajdhani';
-  ctx.fillText('MANPOWER CHECK - EVIDENCIA', x+20, y+40);
   
-  ctx.font = '22px Share Tech Mono';
-  ctx.fillText(`COLABORADOR: ${name}`, x+20, y+80);
-  ctx.fillStyle = '#e86e11'; // Naranja para la fecha
-  ctx.fillText(`FECHA/HORA:  ${ts}`, x+20, y+115);
-  ctx.fillStyle = '#2c3e50';
-  ctx.fillText(`UBICACIÓN:   ${cityName}`, x+20, y+150);
-  ctx.fillText(`COORDENADAS: ${coords}`, x+20, y+185);
+  // Línea decorativa azul superior
+  ctx.fillStyle = '#1264a3';
+  ctx.fillRect(x, y, w, 6); 
 
+  // --- GRABADO DE TEXTO ---
+  ctx.textBaseline = 'top';
+  
+  // Título
+  ctx.fillStyle = '#1264a3';
+  ctx.font = 'bold 30px Rajdhani';
+  ctx.fillText('MANPOWER CHECK - EVIDENCIA', x + 25, y + 25);
+  
+  ctx.font = '24px Share Tech Mono';
+  
+  // Línea 1: Nombre
+  ctx.fillStyle = '#2c3e50';
+  ctx.fillText(`EMPLEADO:  ${name.toUpperCase()}`, x + 25, y + 75);
+  
+  // Línea 2: Fecha (en naranja)
+  ctx.fillStyle = '#e86e11'; 
+  ctx.fillText(`FECHA:     ${ts}`, x + 25, y + 110);
+  
+  // Línea 3: Ciudad y Barrio (Lo que solicitaste)
+  ctx.fillStyle = '#2c3e50';
+  ctx.fillText(`CIUDAD:    ${cityName.toUpperCase()}`, x + 25, y + 145);
+  ctx.fillText(`BARRIO:    ${barrioName.toUpperCase()}`, x + 25, y + 180);
+  
+  // Línea 4: Coordenadas
+  ctx.font = '20px Share Tech Mono';
+  ctx.fillStyle = '#7f8c8d';
+  ctx.fillText(`GPS:       ${coords}`, x + 25, y + 215);
+
+  // Actualizar la tabla visual debajo de la foto para que coincida
   document.getElementById('mName').textContent = name;
   document.getElementById('mTs').textContent = ts;
   document.getElementById('mCity').textContent = cityName;
@@ -289,7 +308,6 @@ function render(img) {
   document.getElementById('previewCard').classList.add('visible');
   document.getElementById('metaTable').classList.add('visible');
 }
-
 // Descarga
 document.getElementById('btnDownload').onclick = () => {
   const link = document.createElement('a');
